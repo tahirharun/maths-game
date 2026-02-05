@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maths Quest</title>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+  <!-- ================= LOGIN SCREEN ================= -->
+  <div id="login-screen" class="screen">
+    <h1>Welcome Back!</h1>
+    <form id="login-form">
+      <input type="email" id="login-email" placeholder="Email" required />
+      <input type="password" id="login-password" placeholder="Password" required />
+      <button type="submit">Login</button>
+    </form>
+    <p>
+      Don't have an account? 
+      <span class="link" id="to-signup">Sign Up</span>
+    </p>
+  </div>
+
+  <!-- ================= SIGNUP SCREEN ================= -->
+  <div id="signup-screen" class="screen" style="display:none;">
+    <h1>Create Account</h1>
+    <form id="signup-form">
+      <input type="text" id="signup-username" placeholder="Username" required />
+      <input type="email" id="signup-email" placeholder="Email" required />
+      <input type="password" id="signup-password" placeholder="Password" required />
+      <button type="submit">Sign Up</button>
+    </form>
+    <p>
+      Already have an account? 
+      <span class="link" id="to-login">Login</span>
+    </p>
+  </div>
+
+  <!-- ================= DIFFICULTY SCREEN ================= -->
+  <div id="difficulty-screen" class="screen" style="display:none;">
+    <h1>Maths Quest</h1>
+    <p>Choose your difficulty</p>
+    <div class="difficulty-buttons">
+      <button onclick="startGame('easy')">Easy</button>
+      <button onclick="startGame('medium')">Medium</button>
+      <button onclick="startGame('hard')">Hard</button>
+    </div>
+    <button onclick="showLeaderboard()">🏆 Leaderboard</button>
+  </div>
+
+  <!-- ================= QUIZ SCREEN ================= -->
+  <div id="quiz-screen" class="screen" style="display:none;">
+    <div class="top-bar">
+      <div id="stars" class="stars">☆☆☆☆☆☆☆☆☆☆</div>
+      <div class="timer-container">
+        <div id="timer-bar"></div>
+        <span id="timer-text">15</span>
+      </div>
+    </div>
+    <button class="sound-toggle" onclick="toggleSound()">🔊</button>
+    <h2 id="question">Question</h2>
+    <div id="options" class="options"></div>
+  </div>
+
+  <!-- ================= RESULT SCREEN ================= -->
+  <div id="result-screen" class="screen" style="display:none;">
+    <h1>🎉 Finished!</h1>
+    <p>Your Score</p>
+    <h2><span id="final-score">0</span> / 10</h2>
+    <p>Best Score: ⭐ <span id="best-score">0</span></p>
+    <button onclick="restartGame()">Play Again</button>
+    <button onclick="showLeaderboard()">🏆 Leaderboard</button>
+  </div>
+
+  <!-- ================= LEADERBOARD SCREEN ================= -->
+  <div id="leaderboard-screen" class="screen" style="display:none;">
+    <h1>🏆 Leaderboard</h1>
+    <div id="leaderboard-list"></div>
+    <button id="back-to-menu">Back</button>
+  </div>
+
+  <!-- Game Script -->
+  <script src="script.js"></script>
+</body>
+</html>
