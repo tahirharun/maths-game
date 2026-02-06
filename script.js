@@ -27,18 +27,10 @@ function toggleSound(){soundOn=!soundOn; localStorage.setItem("sound",soundOn?"o
 const loginScreen = document.getElementById("login-screen");
 const signupScreen = document.getElementById("signup-screen");
 const difficultyScreen = document.getElementById("difficulty-screen");
-const leaderboardScreen = document.getElementById("leaderboard-screen");
-const leaderboardList = document.getElementById("leaderboard-list");
 
 /* ================= LOGIN / SIGNUP ================= */
-document.getElementById("to-signup").onclick = ()=>{
-  loginScreen.style.display="none";
-  signupScreen.style.display="block";
-};
-document.getElementById("to-login").onclick = ()=>{
-  signupScreen.style.display="none";
-  loginScreen.style.display="block";
-};
+document.getElementById("to-signup").onclick = ()=>{ loginScreen.style.display="none"; signupScreen.style.display="block"; };
+document.getElementById("to-login").onclick = ()=>{ signupScreen.style.display="none"; loginScreen.style.display="block"; };
 document.getElementById("login-form").onsubmit = e=>{
   e.preventDefault();
   const email = document.getElementById("login-email").value;
@@ -61,7 +53,7 @@ function startGame(selectedLevel){
   document.getElementById("result-screen").style.display="none";
   document.getElementById("quiz-screen").style.display="block";
   updateStars();
-  toggleSound(); toggleSound();
+  toggleSound(); toggleSound(); // refresh audio button
   showQuestion();
 }
 
@@ -70,8 +62,13 @@ function generateQuestion(){
   const {min,max,ops} = difficulties[level];
   let a=rand(min,max), b=rand(min,max), op=ops[rand(0,ops.length-1)];
   if(op==="/") a*=b;
-  let answer; if(op==="+") answer=a+b; if(op==="-") answer=a-b; if(op==="*") answer=a*b; if(op==="/") answer=a/b;
+  let answer; 
+  if(op==="+") answer=a+b;
+  if(op==="-") answer=a-b;
+  if(op==="*") answer=a*b;
+  if(op==="/") answer=a/b;
   answer = Number.isInteger(answer)?answer:+answer.toFixed(2);
+
   const options = new Set([answer]);
   while(options.size<4) options.add(answer+rand(-10,10));
   return { text:`${a} ${op} ${b}`, answer, options: shuffle([...options]) };
@@ -102,7 +99,14 @@ function startTimer(){
   bar.style.width="100%"; text.textContent=TOTAL_TIME;
   timer=setInterval(()=>{
     timeLeft-=0.1; bar.style.width=(timeLeft/TOTAL_TIME)*100+"%"; text.textContent=Math.ceil(timeLeft);
-    if(timeLeft<=0){ clearInterval(timer); if(locked)return; locked=true; playSound(timeoutSound); questionIndex++; showQuestion(); }
+    if(timeLeft<=0){ 
+      clearInterval(timer); 
+      if(locked)return; 
+      locked=true; 
+      playSound(timeoutSound); 
+      questionIndex++; 
+      showQuestion(); 
+    }
   },100);
 }
 
@@ -126,22 +130,26 @@ function updateStars(){
 function endGame(){
   clearInterval(timer);
   document.getElementById("quiz-screen").style.display="none";
-  document.getElementById("result-screen").style.display="block";
-  document.getElementById("final-score").textContent=score;
+
+  // Show result + leaderboard
+  const resultScreen = document.getElementById("result-screen");
+  resultScreen.style.display="block";
+
+  // Update player score
+  document.getElementById("final-score").textContent = score;
   let best = Number(localStorage.getItem("bestScore"))||0;
   if(score>best){ best=score; localStorage.setItem("bestScore",best); }
   document.getElementById("best-score").textContent=best;
 
-  // Save to leaderboard
-  saveScore(localStorage.getItem("loggedInUser")||"Guest", score);
+  // Save score to leaderboard
+  const username = localStorage.getItem("loggedInUser")||"Guest";
+  saveScore(username, score);
 
+  // Update leaderboard list
+  updateLeaderboard();
+
+  // Confetti for high scores
   if(score>=8) launchConfetti();
-}
-
-/* ================= RESTART ================= */
-function restartGame(){
-  document.getElementById("result-screen").style.display="none";
-  difficultyScreen.style.display="block";
 }
 
 /* ================= LEADERBOARD ================= */
@@ -153,17 +161,24 @@ function saveScore(username,score){
   localStorage.setItem("leaderboard",JSON.stringify(scores));
 }
 
-function showLeaderboard(){
-  leaderboardList.innerHTML="";
+function updateLeaderboard(){
+  const leaderboardList = document.getElementById("leaderboard-list");
+  leaderboardList.innerHTML = "";
   let scores = JSON.parse(localStorage.getItem("leaderboard"))||[];
   if(scores.length===0){ leaderboardList.innerHTML="<p>No scores yet!</p>"; }
-  else{ scores.forEach((s,i)=>{ const div=document.createElement("div"); div.className="leaderboard-entry"; div.innerHTML=`<strong>#${i+1}</strong> ${s.username} - ⭐ ${s.score}`; leaderboardList.appendChild(div); }); }
-  leaderboardScreen.style.display="block";
-  difficultyScreen.style.display="none";
+  else{
+    scores.forEach((s,i)=>{
+      const div=document.createElement("div");
+      div.className="leaderboard-entry";
+      div.innerHTML=`<strong>#${i+1}</strong> ${s.username} - ⭐ ${s.score}`;
+      leaderboardList.appendChild(div);
+    });
+  }
 }
 
-document.getElementById("back-to-menu").onclick = ()=>{
-  leaderboardScreen.style.display="none";
+/* ================= RESTART ================= */
+function restartGame(){
+  document.getElementById("result-screen").style.display="none";
   difficultyScreen.style.display="block";
 }
 

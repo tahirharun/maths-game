@@ -51,7 +51,6 @@
       <button onclick="startGame('medium')">Medium</button>
       <button onclick="startGame('hard')">Hard</button>
     </div>
-    <button onclick="showLeaderboard()">🏆 Leaderboard</button>
   </div>
 
   <!-- ================= QUIZ SCREEN ================= -->
@@ -68,21 +67,21 @@
     <div id="options" class="options"></div>
   </div>
 
-  <!-- ================= RESULT SCREEN ================= -->
+  <!-- ================= RESULT + LEADERBOARD SCREEN ================= -->
   <div id="result-screen" class="screen" style="display:none;">
     <h1>🎉 Finished!</h1>
+    
+    <!-- Player Score -->
     <p>Your Score</p>
     <h2><span id="final-score">0</span> / 10</h2>
     <p>Best Score: ⭐ <span id="best-score">0</span></p>
-    <button onclick="restartGame()">Play Again</button>
-    <button onclick="showLeaderboard()">🏆 Leaderboard</button>
-  </div>
 
-  <!-- ================= LEADERBOARD SCREEN ================= -->
-  <div id="leaderboard-screen" class="screen" style="display:none;">
-    <h1>🏆 Leaderboard</h1>
+    <!-- Leaderboard -->
+    <h2>🏆 Leaderboard</h2>
     <div id="leaderboard-list"></div>
-    <button id="back-to-menu">Back</button>
+
+    <!-- Button -->
+    <button onclick="restartGame()">Play Again</button>
   </div>
 
   <!-- Game Script -->
