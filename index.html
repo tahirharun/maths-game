@@ -4,16 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Maths Quest</title>
-
-  <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
-
-  <!-- Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
-
-  <!-- ================= LOGIN SCREEN ================= -->
   <div id="login-screen" class="screen">
     <h1>Welcome Back!</h1>
     <form id="login-form">
@@ -26,8 +20,6 @@
       <span class="link" id="to-signup">Sign Up</span>
     </p>
   </div>
-
-  <!-- ================= SIGNUP SCREEN ================= -->
   <div id="signup-screen" class="screen" style="display:none;">
     <h1>Create Account</h1>
     <form id="signup-form">
@@ -41,8 +33,6 @@
       <span class="link" id="to-login">Login</span>
     </p>
   </div>
-
-  <!-- ================= DIFFICULTY SCREEN ================= -->
   <div id="difficulty-screen" class="screen" style="display:none;">
     <h1>Maths Quest</h1>
     <p>Choose your difficulty</p>
@@ -52,8 +42,6 @@
       <button onclick="startGame('hard')">Hard</button>
     </div>
   </div>
-
-  <!-- ================= QUIZ SCREEN ================= -->
   <div id="quiz-screen" class="screen" style="display:none;">
     <div class="top-bar">
       <div id="stars" class="stars">☆☆☆☆☆☆☆☆☆☆</div>
@@ -66,25 +54,16 @@
     <h2 id="question">Question</h2>
     <div id="options" class="options"></div>
   </div>
-
-  <!-- ================= RESULT + LEADERBOARD SCREEN ================= -->
   <div id="result-screen" class="screen" style="display:none;">
     <h1>🎉 Finished!</h1>
-    
-    <!-- Player Score -->
     <p>Your Score</p>
     <h2><span id="final-score">0</span> / 10</h2>
     <p>Best Score: ⭐ <span id="best-score">0</span></p>
-
-    <!-- Leaderboard -->
     <h2>🏆 Leaderboard</h2>
     <div id="leaderboard-list"></div>
-
-    <!-- Button -->
     <button onclick="restartGame()">Play Again</button>
   </div>
 
-  <!-- Game Script -->
   <script src="script.js"></script>
 </body>
 </html>

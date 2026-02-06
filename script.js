@@ -1,4 +1,3 @@
-/* ================= SETTINGS ================= */
 const difficulties = {
   easy: { min:1,max:10,ops:["+","-"] },
   medium: { min:5,max:20,ops:["+","-","*","/"] },
@@ -7,28 +6,23 @@ const difficulties = {
 const TOTAL_QUESTIONS = 10;
 const TOTAL_TIME = 15;
 
-/* ================= GAME STATE ================= */
 let score = 0, questionIndex = 0, level = "", timeLeft = TOTAL_TIME, timer=null, locked=false;
 
-/* ================= AUDIO ================= */
 const correctSound = new Audio("correct.mp3");
 const wrongSound = new Audio("wrong.mp3");
 const timeoutSound = new Audio("timeout.mp3");
 [correctSound, wrongSound, timeoutSound].forEach(s=>s.preload="auto");
 let soundOn = localStorage.getItem("sound")!=="off";
 
-/* ================= HELPERS ================= */
 function rand(min,max){return Math.floor(Math.random()*(max-min+1))+min;}
 function shuffle(arr){return arr.sort(()=>Math.random()-0.5);}
 function playSound(sound){if(!soundOn)return; sound.currentTime=0; sound.play().catch(()=>{});}
 function toggleSound(){soundOn=!soundOn; localStorage.setItem("sound",soundOn?"on":"off"); document.querySelector(".sound-toggle").textContent = soundOn?"🔊":"🔇";}
 
-/* ================= SCREENS ================= */
 const loginScreen = document.getElementById("login-screen");
 const signupScreen = document.getElementById("signup-screen");
 const difficultyScreen = document.getElementById("difficulty-screen");
 
-/* ================= LOGIN / SIGNUP ================= */
 document.getElementById("to-signup").onclick = ()=>{ loginScreen.style.display="none"; signupScreen.style.display="block"; };
 document.getElementById("to-login").onclick = ()=>{ signupScreen.style.display="none"; loginScreen.style.display="block"; };
 document.getElementById("login-form").onsubmit = e=>{
@@ -46,18 +40,16 @@ document.getElementById("signup-form").onsubmit = e=>{
   difficultyScreen.style.display="block";
 };
 
-/* ================= GAME FLOW ================= */
 function startGame(selectedLevel){
   level = selectedLevel; score=0; questionIndex=0;
   difficultyScreen.style.display="none";
   document.getElementById("result-screen").style.display="none";
   document.getElementById("quiz-screen").style.display="block";
   updateStars();
-  toggleSound(); toggleSound(); // refresh audio button
+  toggleSound(); toggleSound(); 
   showQuestion();
 }
 
-/* ================= QUESTIONS ================= */
 function generateQuestion(){
   const {min,max,ops} = difficulties[level];
   let a=rand(min,max), b=rand(min,max), op=ops[rand(0,ops.length-1)];
@@ -91,7 +83,6 @@ function showQuestion(){
   startTimer();
 }
 
-/* ================= TIMER ================= */
 function startTimer(){
   timeLeft=TOTAL_TIME;
   const bar=document.getElementById("timer-bar");
@@ -110,7 +101,6 @@ function startTimer(){
   },100);
 }
 
-/* ================= ANSWERS ================= */
 function selectAnswer(selected,correct,btn){
   if(locked) return;
   locked=true; clearInterval(timer);
@@ -121,38 +111,30 @@ function selectAnswer(selected,correct,btn){
   setTimeout(()=>{ questionIndex++; showQuestion(); },1000);
 }
 
-/* ================= STARS ================= */
 function updateStars(){
   document.getElementById("stars").textContent = "⭐".repeat(score)+"☆".repeat(TOTAL_QUESTIONS-score);
 }
 
-/* ================= END GAME ================= */
 function endGame(){
   clearInterval(timer);
   document.getElementById("quiz-screen").style.display="none";
 
-  // Show result + leaderboard
   const resultScreen = document.getElementById("result-screen");
   resultScreen.style.display="block";
 
-  // Update player score
   document.getElementById("final-score").textContent = score;
   let best = Number(localStorage.getItem("bestScore"))||0;
   if(score>best){ best=score; localStorage.setItem("bestScore",best); }
   document.getElementById("best-score").textContent=best;
 
-  // Save score to leaderboard
   const username = localStorage.getItem("loggedInUser")||"Guest";
   saveScore(username, score);
 
-  // Update leaderboard list
   updateLeaderboard();
 
-  // Confetti for high scores
   if(score>=8) launchConfetti();
 }
 
-/* ================= LEADERBOARD ================= */
 function saveScore(username,score){
   let scores = JSON.parse(localStorage.getItem("leaderboard"))||[];
   scores.push({username,score});
@@ -176,13 +158,11 @@ function updateLeaderboard(){
   }
 }
 
-/* ================= RESTART ================= */
 function restartGame(){
   document.getElementById("result-screen").style.display="none";
   difficultyScreen.style.display="block";
 }
 
-/* ================= CONFETTI ================= */
 function launchConfetti(){
   const end = Date.now()+2000;
   const interval = setInterval(()=>{
@@ -191,12 +171,10 @@ function launchConfetti(){
   },250);
 }
 
-/* ================= AUDIO UNLOCK ================= */
 document.addEventListener("click",()=>{
   correctSound.play().then(()=>correctSound.pause()).catch(()=>{});
 },{once:true});
 
-/* ================= INIT ================= */
 window.onload = ()=>{
   loginScreen.style.display="block";
   difficultyScreen.style.display="none";
